@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from .forms import CustomLoginForm
 
 
 class Register(FormView):
@@ -32,6 +33,7 @@ class Register(FormView):
 
 class CustomLoginView(LoginView):
     template_name='App/login.html'
+    form_class = CustomLoginForm
     fields = '__all__'
     redirect_authenticated_user= True
     
@@ -52,6 +54,7 @@ class TaskList(ListView):
         search_input = self.request.GET.get('search-area') or ''
         if search_input:
             context['tasks'] = context['tasks'].filter(title__icontains=search_input)
+            context['search_input']=search_input
         return context    
 
 @method_decorator(login_required,name='dispatch')
